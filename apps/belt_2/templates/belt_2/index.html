@@ -1,0 +1,46 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Welcome | Pokes</title>
+</head>
+<body>
+	<p><a href="{% url 'login:logout' %}">Log Out</a></p>
+	<h1>Welcome, {{ loggeduser.first_name }}!</h1>
+	<h4>{{ loggeduser.pokesreceived.all.count }} people poked you!</h4>
+	<div id='pokers'>
+	{% for poke in loggeduser.pokesreceived.all %}
+		<p>{{ poke.userpoking }} poked you {{ poke.count }} times</p>
+	{% endfor %}
+	</div>
+
+	<h3>People you may want to poke:</h3>
+	<table>
+		<tr>
+			<th>Name</th>
+			<th>Alias</th>
+			<th>Email Address</th>
+			<th>Poke History</th>
+			<th>Action</th>
+		</tr>
+		{% for user in users %}
+			{% if user.id != loggeduser.id %}
+			<tr>
+				<td>{{user.first_name}} {{user.last_name}}</td>
+				<td>{{user.alias}}</td>
+				<td>{{user.email}}</td>
+				<td>{{user.total_pokes}} pokes!</td>
+				<td>
+					<form action="{% url 'pokes:pokes-create' %}" method="post">
+						{% csrf_token %}
+						<input type="hidden" name="id" value="{{ user.id }}">
+						<input type="submit" value="Poke!">
+					</form>
+				</td>
+			</tr>
+			{% endif %}
+		{% endfor %}
+	</table>
+</body>
+</html>

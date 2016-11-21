@@ -1,0 +1,56 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Welcome | Pokes</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'login/css/style.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+</head>
+<body>
+<div id="wrapper">
+    <div class="navbar">
+        <h1 id="title"><a href="{% url 'login:index' %}"><span>P</span>okes</a></h1>
+        <div id=loginformdiv>
+            <form class="form-inline" action="{% url 'login:login' %}" method="post">
+            {% csrf_token %}
+                <ul>
+                {% for input in loginform %}
+                    <li class="form-group">
+                        {{ input.label_tag }} {{ input }}
+                    </li>
+                {% endfor %}
+                    <li class="form-group">
+                        <button class="login-btn" type="submit">Log In</button>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+    <div class='container'>
+        {% if messages %}
+            <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+        <div class="register_space">
+            <h4 id="large-h4">Get Started Today!</h4>
+            <h3 id='intro'>Create your account so you can start poking and getting poked!</h3>
+            <form action="{% url 'login:register' %}" method="post">
+                {% csrf_token %}
+
+                <p>{{ regform.first_name }}{{ regform.last_name }}</p>
+                <p>{{ regform.alias }}</p>
+                <p>{{ regform.email }}</p>
+                <p>{{ regform.password }}</p>
+                <p>{{ regform.confirm_password }}</p>
+            <p id=terms>By clicking Sign up, I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</p>
+                <button class='signup-btn' type='submit'>Sign Up</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
